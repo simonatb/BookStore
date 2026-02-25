@@ -19,8 +19,7 @@ public class AuthorService {
 
     public AuthorResponseDto create(AuthorCreateDto dto) {
         Author author = authorMapper.toEntity(dto);
-        authorRepository.save(author);
-        return authorMapper.toResponseDTO(author);
+        return authorMapper.toResponseDTO(authorRepository.save(author));
     }
 
     public AuthorResponseDto getById(Long id) {
