@@ -11,8 +11,8 @@
 <nav>
     <h1>BookStore</h1>
     <div id="nav-actions">
-        <a href="/login.html">Login</a>
-        <a href="/register.html">Register</a>
+        <a href="/pages/login.html">Login</a>
+        <a href="/pages/register.html">Register</a>
     </div>
 </nav>
 
@@ -29,12 +29,7 @@
     </div>
 </div>
 
-<!--<footer>-->
-<!--    <p>© 2026 BookStore</p>-->
-<!--</footer>-->
-
 <script>
-    // update nav if logged in
     const token = localStorage.getItem('token');
     if (token) {
         document.getElementById('nav-actions').innerHTML = `
@@ -48,7 +43,6 @@
         window.location.reload();
     }
 
-    // load first 4 books as featured
     fetch('http://localhost:8080/api/books')
         .then(res => res.json())
         .then(books => {
@@ -59,7 +53,6 @@
                 return;
             }
 
-            // show only first 4 as featured
             grid.innerHTML = books.slice(0, 4).map(book => `
                 <div class="book-card">
                     <div class="cover genre-${book.genre}">
