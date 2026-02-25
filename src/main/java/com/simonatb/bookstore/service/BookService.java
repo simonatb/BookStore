@@ -1,7 +1,7 @@
 package com.simonatb.bookstore.service;
 
-import com.simonatb.bookstore.dto.BookCreateDTO;
-import com.simonatb.bookstore.dto.BookResponseDTO;
+import com.simonatb.bookstore.dto.BookCreateDto;
+import com.simonatb.bookstore.dto.BookResponseDto;
 import com.simonatb.bookstore.entity.Author;
 import com.simonatb.bookstore.entity.Book;
 import com.simonatb.bookstore.mapper.BookMapper;
@@ -20,7 +20,7 @@ public class BookService {
     private final AuthorRepository authorRepository;
     private final BookMapper bookMapper;
 
-    public BookResponseDTO create(BookCreateDTO dto) {
+    public BookResponseDto create(BookCreateDto dto) {
         Author author = authorRepository.findById(dto.authorId())
             .orElseThrow(() -> new RuntimeException("Author not found with id: " + dto.authorId()));
 
@@ -30,20 +30,20 @@ public class BookService {
         return bookMapper.toResponseDTO(bookRepository.save(book));
     }
 
-    public BookResponseDTO getById(Long id) {
+    public BookResponseDto getById(Long id) {
         Book book = bookRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("book with this id" + id + " not found"));
         return bookMapper.toResponseDTO(book);
     }
 
-    public List<BookResponseDTO> getAll() {
+    public List<BookResponseDto> getAll() {
         return bookRepository.findAll()
             .stream()
             .map(bookMapper::toResponseDTO)
             .toList();
     }
 
-    public BookResponseDTO update(Long id, BookCreateDTO dto) {
+    public BookResponseDto update(Long id, BookCreateDto dto) {
         Book book = bookRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("book with this id" + id + " not found"));
 

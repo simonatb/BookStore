@@ -1,11 +1,12 @@
 package com.simonatb.bookstore.contoller;
 
-import com.simonatb.bookstore.dto.BookCreateDTO;
-import com.simonatb.bookstore.dto.BookResponseDTO;
+import com.simonatb.bookstore.dto.BookCreateDto;
+import com.simonatb.bookstore.dto.BookResponseDto;
 import com.simonatb.bookstore.service.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,26 +26,29 @@ public class BookController {
     private final BookService bookService;
 
     @GetMapping
-    public List<BookResponseDTO> getAllBooks() {
+    public List<BookResponseDto> getAllBooks() {
         return bookService.getAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BookResponseDTO> getBookById(@PathVariable Long id) {
+    public ResponseEntity<BookResponseDto> getBookById(@PathVariable Long id) {
         return ResponseEntity.ok(bookService.getById(id));
     }
 
     @PostMapping
-    public ResponseEntity<BookResponseDTO> createBook(@RequestBody BookCreateDTO dto) {
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public ResponseEntity<BookResponseDto> createBook(@RequestBody BookCreateDto dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(bookService.create(dto));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<BookResponseDTO> updateBook(@PathVariable Long id, @RequestBody BookCreateDTO dto) {
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public ResponseEntity<BookResponseDto> updateBook(@PathVariable Long id, @RequestBody BookCreateDto dto) {
         return ResponseEntity.ok(bookService.update(id, dto));
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Void> deleteBook(@PathVariable Long id) {
         bookService.delete(id);
         return ResponseEntity.noContent().build();
