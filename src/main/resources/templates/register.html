@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" th:href="@{/style.css}">
+    <meta charset="UTF-8">
+    <title>Register</title>
+</head>
+<body>
+<nav>
+    <a href="/"><h1>BookStore</h1></a>
+</nav>
+
+<div class="register-container">
+    <div class="register-card">
+        <h2>Register</h2>
+        <p class="subtitle">Welcome, we are happy to see you register.</p>
+        <div th:if="${error}" class="alert-error" style="color: red; margin-bottom: 15px;">
+            <p th:text="${error}"></p>
+        </div>
+        <form th:action="@{/register}" method="post">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" placeholder="Your Name" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="email@example.com" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="••••••••" required>
+            </div>
+            <button type="submit" class="nav-btn primary register-submit">Register</button>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

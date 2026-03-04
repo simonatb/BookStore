@@ -1,13 +1,11 @@
 package com.simonatb.bookstore.contoller;
 
-import com.simonatb.bookstore.dto.AuthorCreateDto;
-import com.simonatb.bookstore.dto.AuthorResponseDto;
-import com.simonatb.bookstore.entity.User;
+import com.simonatb.bookstore.dto.author.AuthorCreateDto;
+import com.simonatb.bookstore.dto.author.AuthorResponseDto;
 import com.simonatb.bookstore.service.AuthorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,11 +23,6 @@ import java.util.List;
 public class AuthorController {
 
     private final AuthorService authorService;
-
-    @GetMapping("/me")
-    public String me(@AuthenticationPrincipal User user) {
-        return user.getAuthorities().toString();
-    }
 
     @GetMapping
     public List<AuthorResponseDto> getAllAuthors() {

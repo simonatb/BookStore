@@ -1,4 +1,4 @@
-package com.simonatb.bookstore.dto;
+package com.simonatb.bookstore.dto.book;
 
 import com.simonatb.bookstore.entity.Book;
 

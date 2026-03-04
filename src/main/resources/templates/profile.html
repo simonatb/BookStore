@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <link rel="stylesheet" th:href="@{/style.css}">
+    <meta charset="UTF-8">
+    <title th:text="${user.name}">Profile page</title>
+</head>
+<body>
+<nav th:replace="~{navbar :: header-nav}"></nav>
+
+<div class="profile-container">
+    <div class="user-info-card">
+        <h2 th:text="${user.name}"></h2>
+        <p th:text="${user.email}"></p>
+    </div>
+
+    <h3>Order History</h3>
+
+    <div th:if="${#lists.isEmpty(orders)}" class="cart-empty-msg">
+        <p>You haven't placed any orders yet.</p>
+    </div>
+
+    <div class="order-card" th:each="order : ${orders}">
+        <div class="order-header">
+            <div class="order-meta">
+                <span class="order-id">Order #<span th:text="${order.id}"></span></span>
+                <span class="order-date" th:text="${#temporals.format(order.orderDate, 'MMMM dd, yyyy HH:mm')}"></span>
+            </div>
+            <div class="order-total-top">
+                Total: $<span th:text="${#numbers.formatDecimal(order.totalAmount, 1, 2)}"></span>
+            </div>
+        </div>
+
+        <div class="order-body">
+            <div class="order-item-row" th:each="item : ${order.items}">
+                <div class="item-info">
+                    <strong th:text="${item.book.title}"></strong>
+                    <span class="item-qty">Qty: <span th:text="${item.quantity}"></span></span>
+                </div>
+                <div class="item-price">
+                    $<span th:text="${#numbers.formatDecimal(item.price * item.quantity, 1, 2)}"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

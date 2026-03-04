@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+
+<nav th:fragment="header-nav">
+    <a href="/"><h1>BookStore</h1></a>
+    <div class="nav-right">
+        <a sec:authorize="isAuthenticated()" th:href="@{/profile}" class="user-link">
+            <span th:text="${#authentication.name}" class="user-name"></span>
+        </a>
+
+        <form th:action="@{/books}" method="get" style="display:inline">
+            <button type="submit" class="nav-btn">All books</button>
+        </form>
+
+        <form sec:authorize="isAuthenticated()" th:action="@{/logout}" method="post" style="display:inline">
+            <button type="submit" class="nav-btn">Logout</button>
+        </form>
+
+        <form sec:authorize="isAuthenticated()" th:action="@{/cart}" method="get" style="display:inline">
+            <button type="submit" class="nav-btn primary">Cart</button>
+        </form>
+
+        <form sec:authorize="!isAuthenticated()" th:action="@{/login}" method="get" style="display:inline">
+            <button type="submit" class="nav-btn">Login</button>
+        </form>
+
+        <form sec:authorize="!isAuthenticated()" th:action="@{/register}" method="get" style="display:inline">
+            <button type="submit" class="nav-btn primary">Register</button>
+        </form>
+    </div>
+</nav>
+
+</body>
+</html>

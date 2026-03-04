@@ -1,22 +1,37 @@
 package com.simonatb.bookstore.mapper;
 
-import com.simonatb.bookstore.dto.CartItemResponseDto;
-import com.simonatb.bookstore.dto.CartResponseDto;
-import com.simonatb.bookstore.entity.Cart;
-import com.simonatb.bookstore.entity.CartItem;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import com.simonatb.bookstore.dto.cart.CartItemResponseDto;
+import com.simonatb.bookstore.dto.cart.CartResponseDto;
+import com.simonatb.bookstore.entity.cart.Cart;
+import com.simonatb.bookstore.entity.cart.CartItem;
+import org.springframework.stereotype.Component;
 
-@Mapper(componentModel = "spring")
-public interface CartMapper {
+import java.util.List;
+import java.util.stream.Collectors;
 
-    @Mapping(source = "user.id", target = "userId")
-    CartResponseDto toResponseDTO(Cart cart);
+@Component
+public class CartMapper {
 
-    @Mapping(source = "book.id", target = "bookId")
-    @Mapping(source = "book.title", target = "bookTitle")
-    @Mapping(source = "subTotal", target = "totalPrice")
-    CartItemResponseDto toCartItemDTO(CartItem item);
+    public CartResponseDto toResponseDTO(Cart cart) {
+        if (cart == null) {
+            return null;
+        }
+
+        List<CartItemResponseDto> itemDtos = cart.getItems().stream()
+            .map(this::toCartItemDTO)
+            .collect(Collectors.toList());
+
+        return new CartResponseDto(cart.getId(), cart.getUser().getId(), itemDtos, cart.getTotalAmount());
+    }
+
+    public CartItemResponseDto toCartItemDTO(CartItem item) {
+        if (item == null) {
+            return null;
+        }
+
+        return new CartItemResponseDto(item.getId(), item.getBook().getId(),
+            item.getBook().getTitle(), item.getQuantity(), item.getSubTotal());
+    }
 
 }
 

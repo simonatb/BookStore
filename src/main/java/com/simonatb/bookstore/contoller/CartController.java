@@ -1,9 +1,8 @@
 package com.simonatb.bookstore.contoller;
 
-import com.simonatb.bookstore.dto.AddToCartRequest;
-import com.simonatb.bookstore.dto.CartResponseDto;
+import com.simonatb.bookstore.dto.cart.AddToCartRequest;
+import com.simonatb.bookstore.dto.cart.CartResponseDto;
 import com.simonatb.bookstore.entity.User;
-import com.simonatb.bookstore.mapper.CartMapper;
 import com.simonatb.bookstore.service.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

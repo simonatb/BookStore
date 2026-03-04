@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <link rel="stylesheet" th:href="@{/style.css}">
+    <meta charset="UTF-8">
+    <title th:text="${book.title}">Default Title</title>
+</head>
+<body>
+<nav th:replace="~{navbar :: header-nav}"></nav>
+
+
+<div class="book-container">
+
+    <img th:if="${book.imageUrl != null and !book.imageUrl.isEmpty()}"
+         th:src="${book.imageUrl}"
+         th:alt="${book.title}"
+         class="book-image">
+    <div th:unless="${book.imageUrl != null and !book.imageUrl.isEmpty()}"
+         class="book-cover no-image"
+         th:text="${book.title}"></div>
+
+    <div class="book-info">
+        <h1 th:text="${book.title}">Title</h1>
+        <hr>
+        <h3 th:text="${book.authorName}">Author</h3>
+        <p th:text="${book.description}">Description</p>
+        <br>
+        <div class="biography-section">
+            <h4>About the Author</h4>
+            <p th:text="${author.biography}">Biography</p>
+        </div>
+        <br>
+        <h2><span class="book-price" th:text="'$' + ${#numbers.formatDecimal(book.price, 1, 2)}"></span></h2>
+
+        <div class="book-controls">
+            <div class="book-cart-controls" sec:authorize="isAuthenticated()">
+                <form th:action="@{/cart/remove}" method="post" style="display:inline">
+                    <input type="hidden" name="bookId" th:value="${book.id}">
+                    <button type="submit" class="button">−</button>
+                </form>
+
+                <form th:action="@{/cart/add}" method="post" style="display:inline">
+                    <input type="hidden" name="bookId" th:value="${book.id}">
+                    <input type="hidden" name="quantity" value="1">
+                    <button type="submit" class="button">+</button>
+                </form>
+            </div>
+
+            <form sec:authorize="!isAuthenticated()" th:action="@{/login}" method="get" style="display:inline">
+                <button type="submit" class="nav-btn">Login to shop</button>
+            </form>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

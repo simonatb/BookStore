@@ -1,11 +1,14 @@
 package com.simonatb.bookstore.service;
 
-import com.simonatb.bookstore.dto.AddToCartRequest;
-import com.simonatb.bookstore.dto.CartResponseDto;
+import com.simonatb.bookstore.dto.cart.AddToCartRequest;
+import com.simonatb.bookstore.dto.cart.CartResponseDto;
 import com.simonatb.bookstore.entity.Book;
-import com.simonatb.bookstore.entity.Cart;
-import com.simonatb.bookstore.entity.CartItem;
+import com.simonatb.bookstore.entity.cart.Cart;
+import com.simonatb.bookstore.entity.cart.CartItem;
 import com.simonatb.bookstore.entity.User;
+import com.simonatb.bookstore.exceptions.BookNotFoundException;
+import com.simonatb.bookstore.exceptions.EmptyCartException;
+import com.simonatb.bookstore.exceptions.UserNotFoundException;
 import com.simonatb.bookstore.mapper.CartMapper;
 import com.simonatb.bookstore.repository.BookRepository;
 import com.simonatb.bookstore.repository.CartRepository;
@@ -33,7 +36,7 @@ public class CartService {
             .orElseGet(() -> createInitialCart(userId));
 
         Book book = bookRepository.findById(dto.bookId())
-            .orElseThrow(() -> new RuntimeException("Book not found"));
+            .orElseThrow(() -> new BookNotFoundException(String.format("Book with id: %d not found", dto.bookId())));
 
         Optional<CartItem> existingItem = cart.getItems().stream()
             .filter(item -> item.getBook().getId().equals(dto.bookId()))
@@ -42,49 +45,48 @@ public class CartService {
         if (existingItem.isPresent()) {
             CartItem item = existingItem.get();
             item.setQuantity(item.getQuantity() + dto.quantity());
-            item.setSubTotal();
         } else {
             CartItem newItem = CartItem.builder()
                 .book(book)
                 .quantity(dto.quantity())
                 .cart(cart)
+                .price(book.getPrice())
                 .build();
-            newItem.setSubTotal();
             cart.addItem(newItem);
         }
+        cart.updateTotalAmount();
         return cartMapper.toResponseDTO(cartRepository.save(cart));
     }
 
     @Transactional
     public CartResponseDto removeItemFromCart(Long userId, Long bookId) {
         Cart cart = cartRepository.findByUserId(userId)
-            .orElseThrow(() -> new RuntimeException("Cart is empty"));
+            .orElseThrow(() -> new EmptyCartException(String.format("Cart with user id: %d is empty", userId)));
 
         Optional<CartItem> existingItem = cart.getItems().stream()
             .filter(item -> item.getBook().getId().equals(bookId))
             .findFirst();
 
         Book book = bookRepository.findById(bookId)
-            .orElseThrow(() -> new RuntimeException("Book not found"));
+            .orElseThrow(() -> new BookNotFoundException(String.format("Book with id: %d not found", bookId)));
 
         if (existingItem.isPresent()) {
             CartItem item = existingItem.get();
             item.setQuantity(item.getQuantity() - 1);
             item.setPrice(book.getPrice());
-            item.setSubTotal();
+            item.getSubTotal();
             if (item.getQuantity() == 0) {
                 cart.removeItem(item);
             }
-        } else {
-            throw new RuntimeException("Book not found in cart");
         }
+        cart.updateTotalAmount();
         return cartMapper.toResponseDTO(cartRepository.save(cart));
     }
 
     @Transactional
     public void clearCart(Long userId) {
         Cart cart = cartRepository.findByUserId(userId)
-            .orElseThrow(() -> new RuntimeException("Cart is empty"));
+            .orElseThrow(() -> new EmptyCartException(String.format("Cart with user id: %d is empty", userId)));
 
         cart.getItems().clear();
         cartRepository.save(cart);
@@ -92,7 +94,7 @@ public class CartService {
 
     private Cart createInitialCart(Long userId) {
         User user = userRepository.findById(userId)
-            .orElseThrow(() -> new RuntimeException("User not found"));
+            .orElseThrow(() -> new UserNotFoundException(String.format("User with id: %d not found", userId)));
         return Cart.builder().user(user).build();
     }
 

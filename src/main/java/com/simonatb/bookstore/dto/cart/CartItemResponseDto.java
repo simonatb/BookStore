@@ -1,4 +1,4 @@
-package com.simonatb.bookstore.dto;
+package com.simonatb.bookstore.dto.cart;
 
 import java.math.BigDecimal;
 
