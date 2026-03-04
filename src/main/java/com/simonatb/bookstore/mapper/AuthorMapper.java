@@ -1,7 +1,7 @@
 package com.simonatb.bookstore.mapper;
 
-import com.simonatb.bookstore.dto.AuthorCreateDto;
-import com.simonatb.bookstore.dto.AuthorResponseDto;
+import com.simonatb.bookstore.dto.author.AuthorCreateDto;
+import com.simonatb.bookstore.dto.author.AuthorResponseDto;
 import com.simonatb.bookstore.entity.Author;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;

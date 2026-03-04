@@ -1,7 +1,7 @@
 package com.simonatb.bookstore.contoller;
 
-import com.simonatb.bookstore.dto.BookCreateDto;
-import com.simonatb.bookstore.dto.BookResponseDto;
+import com.simonatb.bookstore.dto.book.BookCreateDto;
+import com.simonatb.bookstore.dto.book.BookResponseDto;
 import com.simonatb.bookstore.service.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

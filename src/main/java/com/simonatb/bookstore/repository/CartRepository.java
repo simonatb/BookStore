@@ -1,6 +1,6 @@
 package com.simonatb.bookstore.repository;
 
-import com.simonatb.bookstore.entity.Cart;
+import com.simonatb.bookstore.entity.cart.Cart;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

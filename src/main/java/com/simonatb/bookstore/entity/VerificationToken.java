@@ -33,5 +33,4 @@ public class VerificationToken {
     private User user;
 
     private LocalDateTime expiresAt;
-
 }

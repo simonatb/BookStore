@@ -1,5 +1,6 @@
-package com.simonatb.bookstore.entity;
+package com.simonatb.bookstore.entity.cart;
 
+import com.simonatb.bookstore.entity.User;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -54,14 +55,8 @@ public class Cart {
         updateTotalAmount();
     }
 
-    private void updateTotalAmount() {
-        this.totalAmount = items.stream().map(item -> {
-            BigDecimal unitPrice = item.getPrice();
-            if (unitPrice == null) {
-                return BigDecimal.ZERO;
-            }
-            return unitPrice.multiply(BigDecimal.valueOf(item.getQuantity()));
-        }).reduce(BigDecimal.ZERO, BigDecimal::add);
+    public void updateTotalAmount() {
+        this.totalAmount = items.stream().map(CartItem::getSubTotal).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
 }

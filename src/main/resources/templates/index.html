@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" th:href="@{/style.css}">
+    <meta charset="UTF-8">
+    <title href="/">BookStore</title>
+<body>
+
+<nav th:replace="~{navbar :: header-nav}"></nav>
+
+<div class="books-grid">
+    <div class="book-card" th:each="book : ${books}">
+        <img th:if="${book.imageUrl != null and !book.imageUrl.isEmpty()}"
+             th:src="${book.imageUrl}"
+             th:alt="${book.title}"
+             class="book-cover">
+        <div th:unless="${book.imageUrl != null and !book.imageUrl.isEmpty()}"
+             class="book-cover no-image"
+             th:text="${book.title}"></div>
+
+        <h4 th:text="${book.title}">Title</h4>
+        <p th:text="${book.authorName}">Author</p>
+
+        <div class="book-footer">
+
+            <span class="book-price" th:text="'$' + ${#numbers.formatDecimal(book.price, 1, 2)}"></span>
+
+            <a th:href="@{/books/{id}(id=${book.id})}" class="nav-btn">View Details</a>
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

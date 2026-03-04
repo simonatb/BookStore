@@ -1,7 +1,7 @@
 package com.simonatb.bookstore.mapper;
 
-import com.simonatb.bookstore.dto.BookCreateDto;
-import com.simonatb.bookstore.dto.BookResponseDto;
+import com.simonatb.bookstore.dto.book.BookCreateDto;
+import com.simonatb.bookstore.dto.book.BookResponseDto;
 import com.simonatb.bookstore.entity.Book;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
@@ -21,4 +21,5 @@ public interface BookMapper {
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "author", ignore = true)
     void updateEntityFromDTO(BookCreateDto dto, @MappingTarget Book book);
+
 }

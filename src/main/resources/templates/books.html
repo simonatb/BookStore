@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" th:href="@{/style.css}">
+    <meta charset="UTF-8">
+    <title>All Books</title>
+</head>
+<body>
+<nav th:replace="~{navbar :: header-nav}"></nav>
+
+
+<form th:action="@{/books}" method="get" class="filters-bar">
+    <input type="text" name="search" th:value="${search}" class="search-input"
+           placeholder="Search by title, author or description...">
+    <label>
+        <select name="genre" class="genre-select">
+            <option value="" th:selected="${genre == null or genre == ''}">All Genres</option>
+            <option value="CLASSICS" th:selected="${genre == 'CLASSICS'}">Classics</option>
+            <option value="HORROR" th:selected="${genre == 'HORROR'}">Horror</option>
+            <option value="FICTION" th:selected="${genre == 'FICTION'}">Fiction</option>
+            <option value="ROMANCE" th:selected="${genre == 'ROMANCE'}">Romance</option>
+            <option value="HISTORY" th:selected="${genre == 'HISTORY'}">History</option>
+        </select>
+    </label>
+    <button type="submit" class="filter-btn">Search</button>
+    <a href="/books" class="filter-btn"
+       th:if="${(search != null and !search.isEmpty()) or (genre != null and !genre.isEmpty())}">
+        Clear
+    </a></form>
+<form th:action="@{/book}" method="get" style="display:inline">
+    <div class="books-grid">
+        <div class="book-card" th:each="book : ${books}">
+            <img th:if="${book.imageUrl != null and !book.imageUrl.isEmpty()}"
+                 th:src="${book.imageUrl}"
+                 th:alt="${book.title}"
+                 class="book-cover">
+
+            <h4 th:text="${book.title}">Title</h4>
+            <p th:text="${book.authorName}">Author</p>
+
+            <div class="book-footer">
+                <span class="book-price" th:text="'$' + ${#numbers.formatDecimal(book.price, 1, 2)}"></span>
+
+                <a th:href="@{/books/{id}(id=${book.id})}" class="nav-btn">View Details</a>
+            </div>
+        </div>
+    </div>
+</form>
+</body>
+</html>

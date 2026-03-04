@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <link rel="stylesheet" th:href="@{/style.css}">
+    <meta charset="UTF-8">
+    <title>Cart</title>
+</head>
+<body>
+<nav th:replace="~{navbar :: header-nav}"></nav>
+
+<h1 style="text-align: center; margin-top: 2rem;">Your Shopping Cart</h1>
+
+<div th:if="${cart != null and cart.items != null and !cart.items.empty}">
+<div class="cart-container">
+    <div class="cart-card">
+        <div class="items-card" th:each="item : ${cart.items}" sec:authorize="isAuthenticated()">
+            <h4 th:text="${item.bookTitle}"></h4>
+            <p th:text="${item.quantity}"></p>
+            <p th:text="'$' + ${#numbers.formatDecimal(item.totalPrice, 1, 2)}"></p>
+            </div>
+        <div class="cart-footer">
+            <div th:if="${cart != null and cart.items != null and !cart.items.empty}">
+                <p th:text="'$' + ${#numbers.formatDecimal(cart.totalAmount, 1, 2)}"></p>
+                <div class="cart-controls" sec:authorize="isAuthenticated()">
+                    <form th:action="@{/cart/clear}" method="post" style="display:inline">
+                        <button type="submit" class="clear-button">Clear cart</button>
+                    </form>
+                    <form sec:authorize="isAuthenticated()" th:action="@{/order}" method="post" style="display:inline">
+                        <button type="submit" class="nav-btn primary">Order</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        </div>
+
+    </div>
+</div>
+<div th:unless="${cart != null and cart.items != null and !cart.items.empty}" class="cart-empty-msg">
+    <h2>Your cart is empty</h2>
+    <a href="/books" class="nav-btn primary" style="display:inline-block; margin-top: 1rem;">Go Shopping</a>
+</div>
+</body>
+</html>
