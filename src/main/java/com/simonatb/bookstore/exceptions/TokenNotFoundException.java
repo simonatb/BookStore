@@ -1,6 +1,6 @@
 package com.simonatb.bookstore.exceptions;
 
-public class TokenNotFoundException extends RuntimeException {
+public class TokenNotFoundException extends ResourceNotFoundException {
 
     public TokenNotFoundException(String message) {
         super(message);

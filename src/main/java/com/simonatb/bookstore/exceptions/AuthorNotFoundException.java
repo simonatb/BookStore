@@ -1,6 +1,6 @@
 package com.simonatb.bookstore.exceptions;
 
-public class AuthorNotFoundException extends RuntimeException {
+public class AuthorNotFoundException extends ResourceNotFoundException {
 
     public AuthorNotFoundException(String message) {
         super(message);

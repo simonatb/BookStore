@@ -47,11 +47,11 @@ public class BookService {
 
     public BookResponseDto update(Long id, BookCreateDto dto) {
         Book book = bookRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("book with this id" + id + " not found"));
+            .orElseThrow(() -> new BookNotFoundException("book with this id" + id + " not found"));
 
         if (dto.authorId() != null) {
             Author author = authorRepository.findById(dto.authorId())
-                .orElseThrow(() -> new RuntimeException("Author not found with id: " + dto.authorId()));
+                .orElseThrow(() -> new AuthorNotFoundException("Author not found with id: " + dto.authorId()));
             book.setAuthor(author);
         }
 
@@ -61,7 +61,7 @@ public class BookService {
 
     public void delete(Long id) {
         Book book = bookRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("book with this id" + id + " not found"));
+            .orElseThrow(() -> new BookNotFoundException("book with this id" + id + " not found"));
 
         bookRepository.delete(book);
     }
